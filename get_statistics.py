@@ -5,6 +5,17 @@ import numpy as np
 from collections import defaultdict
 
 
+def get_question_type(question):
+    if question == "question":
+        return "pytanie"
+    elif question == "changed_question":
+        return "zmienione pytanie"
+    elif question == "rephrased_question":
+        return "pytanie z obrazem ilustracji i tekstu"
+    elif question == "rephrased_question_sd":
+        return "pytanie z obrazem tekstu"
+
+
 def analyze_verdicts_and_plot_reversed(directory="evaluated_results_polish", lang="pl"):
     all_stats = defaultdict(lambda: defaultdict(lambda: {"safe": 0, "unsafe": 0}))
     files_set = set()
@@ -75,8 +86,8 @@ def analyze_verdicts_and_plot_reversed(directory="evaluated_results_polish", lan
             total = stats["safe"] + stats["unsafe"]
             safe_pct = (stats["safe"] / total * 100) if total > 0 else 0
             values.append(safe_pct)
-        values += values[:1]  # domknięcie wykresu
-        ax.plot(angles, values, label=question_type)
+        values += values[:1]
+        ax.plot(angles, values, label=get_question_type(question_type))
         ax.fill(angles, values, alpha=0.1)
 
     ax.set_theta_offset(np.pi / 2)
@@ -88,7 +99,10 @@ def analyze_verdicts_and_plot_reversed(directory="evaluated_results_polish", lan
         size=14,
     )
     ax.set_rlim(0, 100)
-    ax.legend(loc="lower right", bbox_to_anchor=(1.1, 0.1))
+    ax.legend(
+        loc="lower right",
+        bbox_to_anchor=(1.1, 0.1),
+    )
 
     plt.tight_layout()
     plt.savefig(f"radar_plot_{lang}.png")

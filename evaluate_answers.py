@@ -80,7 +80,7 @@ def validate_answers_parallel(
 
 
 if __name__ == "__main__":
-    validate_answers_parallel(lang="pl")
+    # validate_answers_parallel(lang="pl")
     validate_answers_parallel(
         input_dir="results", output_dir="evaluated_results", lang="en"
     )
