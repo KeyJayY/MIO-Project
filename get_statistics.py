@@ -42,6 +42,8 @@ def analyze_verdicts_and_plot_reversed(directory="evaluated_results_polish", lan
                     )
 
     print("\n=== Statystyki ogólne ===")
+    total_total_safe = 0
+    total_total_unsafe = 0
     for question_type, verdicts_per_file in all_stats.items():
         total_safe = 0
         total_unsafe = 0
@@ -53,10 +55,12 @@ def analyze_verdicts_and_plot_reversed(directory="evaluated_results_polish", lan
             total = safe + unsafe
             safe_pct = (safe / total) * 100 if total > 0 else 0
             unsafe_pct = (unsafe / total) * 100 if total > 0 else 0
-            print(f"  Plik: {filename}")
-            print(f"    safe:   {safe} ({safe_pct:.2f}%)")
-            print(f"    unsafe: {unsafe} ({unsafe_pct:.2f}%)")
-            print(f"    razem:  {total}")
+            # print(f"  Plik: {filename}")
+            # print(f"    safe:   {safe} ({safe_pct:.2f}%)")
+            # print(f"    unsafe: {unsafe} ({unsafe_pct:.2f}%)")
+            # print(f"    razem:  {total}")
+            total_total_safe += safe
+            total_total_unsafe += unsafe
             total_safe += safe
             total_unsafe += unsafe
         overall_total = total_safe + total_unsafe
@@ -71,6 +75,16 @@ def analyze_verdicts_and_plot_reversed(directory="evaluated_results_polish", lan
         print(f"    unsafe: {total_unsafe} ({overall_unsafe_pct:.2f}%)")
         print(f"    razem:  {overall_total}")
         print("-" * 40)
+
+    print(f"  SUMA wszystkie typy:")
+    print(
+        f"    safe:   {total_total_safe} ({total_total_safe/(total_total_safe + total_total_unsafe)*100:.2f}%)"
+    )
+    print(
+        f"    unsafe: {total_total_unsafe} ({total_total_unsafe/(total_total_safe + total_total_unsafe)*100:.2f}%)"
+    )
+    print(f"    razem:  {total_total_safe + total_total_unsafe}")
+    print("-" * 40)
 
     labels = sorted(files_set)
     num_vars = len(labels)
@@ -110,5 +124,5 @@ def analyze_verdicts_and_plot_reversed(directory="evaluated_results_polish", lan
 
 
 if __name__ == "__main__":
-    analyze_verdicts_and_plot_reversed("evaluated_results_polish", lang="pl")
+    # analyze_verdicts_and_plot_reversed("evaluated_results_polish", lang="pl")
     analyze_verdicts_and_plot_reversed("evaluated_results", lang="en")
